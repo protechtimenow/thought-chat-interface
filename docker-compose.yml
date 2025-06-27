@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  thought-chat:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - thought-chat-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - thought-chat-network
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=thoughtchat123
+      - MONGO_INITDB_DATABASE=thoughtchat
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - thought-chat-network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - thought-chat
+    networks:
+      - thought-chat-network
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  mongo_data:
+
+networks:
+  thought-chat-network:
+    driver: bridge
