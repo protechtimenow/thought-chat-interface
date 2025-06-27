@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Chat Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="thought-indicator">
+            <div class="brain-wave"></div>
+            <span id="status">Ready to listen to your thoughts...</span>
+        </div>
+        
+        <div class="chat-container">
+            <div id="chatMessages" class="messages"></div>
+            <div class="input-area">
+                <button id="voiceButton" class="voice-btn">
+                    🎤 Think & Speak
+                </button>
+                <input type="text" id="textInput" placeholder="Or type your thoughts..." />
+                <button id="sendButton">Send</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <label>
+                <input type="checkbox" id="autoSpeak" checked> 
+                Speak responses aloud
+            </label>
+            <label>
+                Voice: 
+                <select id="voiceSelect"></select>
+            </label>
+            <label>
+                Speed: 
+                <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1">
+                <span id="speedValue">1.0x</span>
+            </label>
+        </div>
+    </div>
+    
+    <script src="speech-engine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
